@@ -1,0 +1,36 @@
+/* CSS Document */
+.libhours .hours-secondary, .libhours .lesshours {
+	display: none;
+}
+
+a.togglehours {
+	padding: 6px 10px;
+	border: 1px solid #666;
+	border-radius: 8px;
+	background-color: white;
+	text-decoration: none;
+}
+
+a.togglehours:hover {
+	background-color: #ddd;
+}
+
+a:hover.togglehours {
+	text-decoration: none;
+}
+
+.libhours h2 {
+	font-size: 100%;
+	padding: .25em 0px;
+	margin: .25em 0px;
+	font-weight: bold;
+}
+
+.libhours p {
+	margin: 0px 0px 1em 0px;
+}
+
+.libhours p.hours {
+	/*border-bottom: 1px solid #02779e;*/
+	width: 200px;
+}

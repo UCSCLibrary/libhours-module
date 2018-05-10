@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Create a search block
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function libhours_block_info() {
+  $blocks['libhours'] = array(
+    'info' => t('Library Hours'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function libhours_block_view() {
+
+/**
+ * Calling the js file
+ */
+
+drupal_add_js(drupal_get_path('module', 'libhours') . '/libhours.js');
+
+/**
+ * Calling the css file
+ */
+
+drupal_add_css(drupal_get_path('module', 'libhours') . '/libhours.css');
+
+/**
+ * Block content
+ */
+
+  $mainStart = "<div class='libhours'><div class='hours-main'>";
+  $mainEnd = "<p><a class='togglehours morehours' href='#'>View More</a></p><p><a class='togglehours lesshours' href='#'>View Less</a></p></div>";
+  $mchRss = new DOMDocument();
+  $mchRss->load('https://api3.libcal.com/api_hours_today.php?iid=181&lid=724&format=xml');
+  $mchHours = $mchRss->getElementsByTagName('rendered')->item(0)->nodeValue;
+  $mchHours = "<p class='hours'>".$mchHours."</p>";
+  $mchTitle = "<h2>McHenry Library</h2>";
+  $mch = $mchTitle."<br>".$mchHours;
+  $sciHours = $mchRss->getElementsByTagName('rendered')->item(1)->nodeValue;
+  $sciHours = "<p class='hours'>".$sciHours."</p>";
+  $sciTitle = "<h2>Science & Engineering Library</h2>";
+  $mch = $mchTitle.$mchHours;
+  $sci = $sciTitle.$sciHours;
+  $hoursMain = $mainStart.$mch.$sci.$mainEnd;
+
+  $secondaryStart = "<div class='hours-secondary'>";
+  $secondaryEnd = "<p><a href='http://guides.library.ucsc.edu/libraryhours'>Full Schedule</a></p></div></div>";
+
+  $infRss = new DOMDocument();
+  $infRss->load('https://api3.libcal.com/api_hours_today.php?iid=181&lid=864&format=xml');
+  $infHours = $infRss->getElementsByTagName('rendered')->item(0)->nodeValue;
+  $infHours = "<p class='hours'>".$infHours."</p>";
+  $infTitle = "<h2><a href='https://guides.library.ucsc.edu/ask-a-librarian/in-person'>Information Services</a></h2>";
+  $inf = $infTitle.$infHours;
+  $dscRss = new DOMDocument();
+  $dscRss->load('https://api3.libcal.com/api_hours_today.php?iid=181&lid=863&format=xml');
+  $dscHours = $dscRss->getElementsByTagName('rendered')->item(0)->nodeValue;
+  $dscHours = "<p class='hours'>".$dscHours."</p>";
+  $dscTitle = "<h2><a href='https://guides.library.ucsc.edu/DSC/home'>Digital Scholarship Commons</a></h2>";
+  $dsc = $dscTitle.$dscHours;
+  $scaRss = new DOMDocument();
+  $scaRss->load('https://api3.libcal.com/api_hours_today.php?iid=181&lid=866&format=xml');
+  $scaHours = $scaRss->getElementsByTagName('rendered')->item(0)->nodeValue;
+  $scaHours = "<p class='hours'>".$scaHours."</p>";
+  $scaTitle = "<h2><a href='https://guides.library.ucsc.edu/speccoll'>Special Collections and Archives</a></h2>";
+  $sca = $scaTitle.$scaHours;
+  $hoursSecondary = $secondaryStart.$inf.$dsc.$sca.$secondaryEnd;
+
+  $content = $hoursMain.$hoursSecondary;
+  $block = array(
+    'subject' => t("Today's Hours"),
+    'content' => $content,
+  );
+  return $block;
+
+}
